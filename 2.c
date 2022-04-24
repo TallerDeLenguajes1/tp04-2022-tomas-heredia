@@ -13,6 +13,7 @@ void cargadoTareas(tarea **listaTareas, int cantidadTareas);
 void mostrTareasYMober(tarea **listaTareas,tarea **tareasRealizadas, int cantidadTareas);
 void mostrTareas(tarea **listaTareas, int cantidadTareas,int elemento);
 void realizadasYPorRealizar(tarea **listaTareas,tarea **tareasRealizadas, int cantidadTareas);
+tarea BuscarTarea(tarea **listaTareas, int cantidadTareas);
 void main(){
     int cantidadTareas = 0;
     tarea **listaTareas;
@@ -29,6 +30,7 @@ void main(){
 
     realizadasYPorRealizar(listaTareas,tareasRealizadas, cantidadTareas);
 
+    tarea buscada = BuscarTarea(listaTareas, cantidadTareas);
 
 //liveracion de los punteros
     for (int i = 0; i < cantidadTareas; i++)
@@ -41,11 +43,10 @@ void main(){
 
     free(listaTareas);
     free(tareasRealizadas);
-
+}
 
 void cargadoTareas(tarea **listaTareas, int cantidadTareas){
-   
-    
+
     char *Buff= (char *) malloc(100*sizeof(char));
     int aux;
 
@@ -117,4 +118,20 @@ void realizadasYPorRealizar(tarea **listaTareas,tarea **tareasRealizadas, int ca
 
     }
         
+}
+
+tarea BuscarTarea(tarea **listaTareas, int cantidadTareas){
+    int idBuscado = 0;
+    printf("\nIngrese el ID de la tarea buscada: ");
+    scanf("%d",&idBuscado);
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if ((*(listaTareas + i))->TareaID == idBuscado )
+        {
+            retun(*(listaTareas + i));
+        }
+         
+    }
+
+    
 }
