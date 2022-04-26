@@ -3,13 +3,20 @@
 #include<stdlib.h>
 #include<time.h>
 
-struct Tarea {
+struct Tarea{
 int TareaID; //Numerado en ciclo iterativo
 char *Descripcion; //
 int Duracion; // entre 10 – 100
-}; typedef struct Tarea tarea;
+};
+typedef struct Nodo{
+    tarea T;
+    Nodo *Siguiente;
+}Nodo;
 
-void cargadoTareas(tarea **listaTareas, int cantidadTareas);
+ typedef struct Tarea tarea;
+
+Nodo *crearNodo();
+void cargarTareas(Nodo **, int);
 void mostrTareasYMober(tarea **listaTareas,tarea **tareasRealizadas, int cantidadTareas);
 void mostrTareas(tarea **listaTareas, int cantidadTareas,int elemento);
 void realizadasYPorRealizar(tarea **listaTareas,tarea **tareasRealizadas, int cantidadTareas);
@@ -17,15 +24,18 @@ tarea *BuscarTareaPorID(tarea **listaTareas, int cantidadTareas);
 tarea *BuscarTareaPorPalabra(tarea **listaTareas, int cantidadTareas);
 void main(){
     int cantidadTareas = 0;
-    tarea **listaTareas;
-    tarea **tareasRealizadas;
+    Nodo *listaTareas;
+    tarea *tareasRealizadas;
 
     printf("\nIngrese la cvantidad de tarea a realizar: ");
     scanf("%d",&cantidadTareas);
-    listaTareas = (tarea **)malloc(sizeof(tarea*)*cantidadTareas);
-    tareasRealizadas = (tarea **)malloc(sizeof(tarea*)*cantidadTareas);
     
-    cargadoTareas(listaTareas, cantidadTareas);
+    
+    
+    listaTareas = crearNodo();
+    tareasRealizadas = crearNodo();
+    cargarTareas(&listaTareas, cantidadTareas);
+
 
     mostrTareasYMober(listaTareas,tareasRealizadas, cantidadTareas);
 
@@ -48,29 +58,18 @@ void main(){
     free(tareasRealizadas);
 }
 
-void cargadoTareas(tarea **listaTareas, int cantidadTareas){
-
-    char *Buff= (char *) malloc(100*sizeof(char));
-    int aux;
-
+Nodo *crearNodo(){
+    return NULL;
     
-    for (int i = 0; i < cantidadTareas; i++)
+}
+
+void cargarTareas(Nodo **lista, int cantidad){
+    lista = (tarea **)malloc(sizeof(tarea *)*cantidad);
+    for (int i = 0; i < cantidad; i++)
     {
-        *(listaTareas + i) = (tarea *)malloc(sizeof(tarea));
-        (*(listaTareas + i))->TareaID = i+1;
-        
-        printf("\nIngrese la descripcion de la tarea %d \n", i +1);
-        fflush(stdin);
-        gets(Buff);
-        (*(listaTareas + i))->Descripcion = (char *)malloc((strlen(Buff)+1)*sizeof(char));
-        strcpy((*(listaTareas + i))->Descripcion,Buff);
-        
-        printf("\n Ingrese la Duracion de la tarea (entre 10 y 100): ");
-        scanf("%d",&aux);
-        (*(listaTareas + i))->Duracion = aux;
+        lista[i]->T.TareaID
     }
     
-    free(Buff);
 }
 
 void mostrTareasYMober(tarea **listaTareas,tarea **tareasRealizadas, int cantidadTareas){
