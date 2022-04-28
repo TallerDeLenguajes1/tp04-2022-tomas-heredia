@@ -1,97 +1,211 @@
 #include <stdio.h>
 #include<string.h>
 #include<stdlib.h>
-
 #include<time.h>
 
-struct Producto {
-int ProductoID; //Numerado en ciclo iterativo
-int Cantidad; // entre 1 y 10
-char *TipoProducto; // Algún valor del arreglo TiposProductos
-float PrecioUnitario; // entre 10 - 100
-};typedef struct Producto Producto;
-struct Cliente {
-int ClienteID; // Numerado en el ciclo iterativo
-char *NombreCliente; // Ingresado por usuario
-int CantidadProductosAPedir; // (aleatorio entre 1 y 5)
-Producto *Productos //El tamaño de este arreglo depende de la variable
-// “CantidadProductosAPedir”
-};typedef struct Cliente Cliente;
+struct Tarea{
+int TareaID; //Numerado en ciclo iterativo
+char *Descripcion; //
+int Duracion; // entre 10 – 100
+};
+typedef struct Tarea tarea;
 
-int TotalProducto(Producto p);
+typedef struct Nodo{
+    tarea T;
+    struct Nodo *Siguiente;
+}Nodo;
 
+
+
+Nodo *crearNodo();
+Nodo *cargarNodo(int);
+void cargarTareas(Nodo **, int);
+void mostrTareasYMober(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas);
+void mostrTareas(Nodo *listaTareas,int elemento);
+void realizadasYPorRealizar(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas);
+Nodo BuscarTareaPorID(Nodo *listaTareas, int cantidadTareas);
+Nodo BuscarTareaPorPalabra(Nodo *listaTareas, int cantidadTareas);
+void reasignarNodo(Nodo **,Nodo **, int);
 void main(){
-    srand(time(NULL));
-    float total = 0;
-    char *TiposProductos[]={"Galletas","Snack","Cigarrillos","Caramelos","Bebidas"};
-    char *Buff= (char *) malloc(100*sizeof(char));
-    int cantidadClientes;
-    printf("Ingrese la cantidad de clientes: ");
-    scanf("%d",&cantidadClientes);
-    fflush(stdin);
+    int cantidadTareas = 0;
+    Nodo *listaTareas;
+    Nodo *tareasRealizadas;
 
-    Cliente *V = (Cliente *) malloc(sizeof(Cliente)*cantidadClientes);
-
-    for (int i = 0; i < cantidadClientes; i++)
-    {
-        printf("\nCliente %d ",i+1);
-        
-        V[i].ClienteID = rand()%100;
-
-        printf("\nNombre de cliente: ");
-        getchar();
-        gets(Buff);
-        V[i].NombreCliente= (char *) malloc((strlen(Buff)+1)*sizeof(char));
-        strcpy(V[i].NombreCliente,Buff);
-
-        V[i].CantidadProductosAPedir = rand()%11+1;
-        V[i].Productos = (Producto *) malloc(sizeof(Producto)*V[i].CantidadProductosAPedir);
-
-        for (int j = 0; j < V[i].CantidadProductosAPedir; j++)
-        {
-            V[i].Productos[j].Cantidad = rand()%101;
-            V[i].Productos[j].PrecioUnitario = rand () % 101 + 10;;
-            int productoT = rand()%5;
-            Buff = TiposProductos[productoT];
-            //asignar con malloc y lonjitud al tipoproducto
-            V[i].Productos[j].TipoProducto = (char *) malloc((strlen(Buff)+1)*sizeof(char));
-            strcpy(V[i].Productos[j].TipoProducto,Buff);
-
-            V[i].Productos[j].ProductoID = rand()%11+1;
-        }
-        
-        
-    }
-
-    for (int i = 0; i < cantidadClientes; i++)
-    {
-        float total = 0;
-        printf("\nCLiente: %d",i+1);
-        printf("\nNombre: ");
-        puts(V[i].NombreCliente);
-        printf("\nID: %d \n Cantidad de productos a pedir: %d ", V[i].ClienteID, V[i].CantidadProductosAPedir);
-        for (int j = 0; j < V[i].CantidadProductosAPedir; j++)
-        {
-            printf("\nTipo: ");
-            
-            puts(V[i].Productos[j].TipoProducto);
-            printf("\n ProductoID: %d \n Cantidad: %d \n Precio: %.2f$",V[i].Productos[j].ProductoID, V[i].Productos[j].Cantidad, V[i].Productos[j].PrecioUnitario);
-            total = total + TotalProducto(V[i].Productos[j]);
-        }
-        printf("\nTotal a pagar: %.2f $",total);
-        
-       
-    }
+    printf("\nIngrese la cvantidad de tarea a realizar: ");
+    scanf("%d",&cantidadTareas);
     
-        getchar();
+    
+    
+    listaTareas = crearNodo();
+    tareasRealizadas = crearNodo();
+    cargarTareas(&listaTareas, cantidadTareas);
 
 
+    mostrTareasYMober(&listaTareas,&tareasRealizadas, cantidadTareas);
 
-    free(V);
-    free(Buff);
+    realizadasYPorRealizar(listaTareas,tareasRealizadas, cantidadTareas);
+
+    BuscarTareaPorID(listaTareas, cantidadTareas);
+    BuscarTareaPorPalabra(listaTareas,cantidadTareas);
+    
+
+//liveracion de los punteros
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        
+        free(listaTareas[i].T.Descripcion);
+        
+        
+        free(tareasRealizadas[i].T.Descripcion);
+        
+    }
+
+    free(listaTareas);
+    free(tareasRealizadas);
 }
 
+Nodo *crearNodo(){
+    return NULL;
+    
+}
 
-int TotalProducto(Producto p){
-    return(p.Cantidad * p.PrecioUnitario);
+void cargarTareas(Nodo **lista, int cantidad){
+   
+    for (int i = 0; i < cantidad; i++)
+    {
+       Nodo *NuevoNodo = crearNodo(i);
+       NuevoNodo->Siguiente = *lista;
+       *lista = NuevoNodo;
+    }
+    
+}
+
+void mostrTareasYMober(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas){
+    
+    int eleccion = 0;
+    
+    for (int i = 0; i <  cantidadTareas; i++)
+    {
+        mostrTareas(*listaTareas,i);
+        print("\n Esta tarea fue realisada ? \n 1_SI      2_NO");
+        scanf("%d", &eleccion);
+        if (eleccion == 1)
+        {
+            reasignarNodo(listaTareas, tareasRealizadas, i);
+        }  
+    }
+    
+}
+
+void mostrTareas(Nodo *listaTareas,int elemento){
+    Nodo *lista = listaTareas;
+    while (lista != NULL)
+    {
+        if (lista->T.TareaID == elemento)
+        {
+            printf("\nTarea %d", elemento+1);
+            printf("\nID: %d",listaTareas->T.TareaID);
+            printf("\nDescripcion: ");
+            puts(listaTareas->T.Descripcion);
+            printf("\nDuracion: %d",listaTareas->T.Duracion);
+        }
+    lista = lista->Siguiente;
+    }
+    
+   
+    
+        
+    
+    
+}
+
+void realizadasYPorRealizar(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas){
+
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if(*(listaTareas + i) != NULL){
+            mostrTareas(*listaTareas,i);
+        }else
+        {
+            mostrTareas(*tareasRealizadas,i);
+        }
+        
+
+    }
+        
+}
+
+Nodo BuscarTareaPorID(Nodo *listaTareas, int cantidadTareas){
+    int idBuscado = 0;
+    printf("\nIngrese el ID de la tarea buscada: ");
+    scanf("%d",&idBuscado);
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (listaTareas->T.TareaID == idBuscado )
+        {
+            mostrTareas(listaTareas,i);
+            
+        }
+         
+    }
+
+    
+}
+
+Nodo BuscarTareaPorPalabra(Nodo *listaTareas, int cantidadTareas){
+    char palabra[30];
+    printf("\nIngrese la palabra a buscar: ");
+    fflush(stdin);
+    gets(palabra);
+
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if (strstr(listaTareas->T.Descripcion,palabra))
+        {
+            mostrTareas(listaTareas,i);
+            return listaTareas[i];
+        }
+        
+        
+    }
+    }
+
+
+void reasignarNodo(Nodo **listaPendiente, Nodo **listaHecha, int i){
+    Nodo *aux;
+    while (*listaPendiente != NULL)
+    {
+        
+        if ((*listaPendiente)->T.TareaID = i)
+        {
+            aux = (*listaPendiente);
+            (*listaPendiente)->Siguiente = aux->Siguiente;
+            (*listaHecha) = aux;
+            free(aux);
+        }
+        
+    }
+    
+}
+
+Nodo *cargarNodo(int i){
+    Nodo * NNodo = (Nodo *) malloc (sizeof(Nodo));
+    NNodo->Siguiente = NULL;
+    
+    int aux;
+    char *Buff = (char *)malloc(sizeof(char)*100);
+    NNodo->T;
+    
+    NNodo->T.TareaID = i+1;
+        
+    printf("\nIngrese la descripcion de la tarea %d \n", i +1);
+    fflush(stdin);
+    gets(Buff);
+    NNodo->T.Descripcion = (char *)malloc((strlen(Buff)+1)*sizeof(char));
+    strcpy(NNodo->T.Descripcion,Buff);
+    free(Buff);
+    printf("\n Ingrese la Duracion de la tarea (entre 10 y 100): ");
+    scanf("%d",&aux);
+    NNodo->T.Duracion = aux;
+    return NNodo;
 }
