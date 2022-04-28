@@ -122,17 +122,19 @@ void mostrTareas(Nodo *listaTareas,int elemento){
 
 void realizadasYPorRealizar(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas){
 
+    printf("\nTareas por realizar:   \n");
     for (int i = 0; i < cantidadTareas; i++)
     {
-        if(*(listaTareas + i) != NULL){
+        if(*(listaTareas + i) != NULL)
             mostrTareas(*listaTareas,i);
-        }else
-        {
-            mostrTareas(*tareasRealizadas,i);
-        }
-        
-
     }
+    printf("\nTareas realizadas:   \n");
+    for (int i = 0; i < cantidadTareas; i++)
+    {
+        if(*(tareasRealizadas + i) != NULL)
+            mostrTareas(*tareasRealizadas,i);
+    }
+    
         
 }
 
