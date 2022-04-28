@@ -73,7 +73,7 @@ void cargarTareas(Nodo **lista, int cantidad){
    
     for (int i = 0; i < cantidad; i++)
     {
-       Nodo *NuevoNodo = (Nodo *)malloc(sizeof(Nodo));
+       Nodo *NuevoNodo ;
        NuevoNodo = cargarNodo(i);
        NuevoNodo->Siguiente = *lista;
        *lista = NuevoNodo;
