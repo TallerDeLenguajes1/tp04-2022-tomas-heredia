@@ -3,9 +3,8 @@
         {
             "type": "cppbuild",
             "label": "C/C++: gcc.exe compilar archivo activo",
-            "command": "C:\\w64devkit\\bin\\gcc.exe",
+            "command": "C:\\Dev-Cpp\\bin\\gcc.exe",
             "args": [
-                "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
                 "-o",
