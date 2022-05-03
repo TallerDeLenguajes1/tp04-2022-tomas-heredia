@@ -26,7 +26,7 @@ void realizadasYPorRealizar(Nodo **listaTareas,Nodo **tareasRealizadas, int cant
 Nodo BuscarTareaPorID(Nodo *listaTareas, int cantidadTareas);
 Nodo BuscarTareaPorPalabra(Nodo *listaTareas, int cantidadTareas);
 void reasignarNodo(Nodo **,Nodo **, int);
-Nodo* crearNodo2(char descripcion,int id,int duracion);
+Nodo* crearNodo2(char *descripcion,int id,int duracion);
 void insertarNodo(Nodo **start,char *descripcion,int id,int duracion);
 void main(){
     int cantidadTareas = 0;
@@ -83,27 +83,7 @@ void cargarTareas(Nodo **lista, int cantidad){
     
 }
 
-void mostrTareasYMober(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas){
-    Nodo *aux = crearNodo(); 
-    int eleccion = 1;
-    
-    for (int i = 1; i <=  cantidadTareas; i++)
-    {
-        mostrTareas(*listaTareas,i);
-        printf("\n Esta tarea fue realisada ? \n 1_SI      2_NO");
-        scanf("%d", &eleccion);
-        if (eleccion == 1)
-        {
-            insertarNodo(tareasRealizadas,(*listaTareas)->T.Descripcion,(*listaTareas)->T.TareaID,(*listaTareas)->T.Duracion);
-        } else
-        {
-            insertarNodo(&aux,(*listaTareas)->T.Descripcion,(*listaTareas)->T.TareaID,(*listaTareas)->T.Duracion);
 
-        }
-        *listaTareas = (*listaTareas)->Siguiente;
-    }
-    *listaTareas = aux;
-}
 
 void mostrTareas(Nodo *listaTareas,int elemento){
     Nodo *lista = listaTareas;
@@ -111,7 +91,7 @@ void mostrTareas(Nodo *listaTareas,int elemento){
     {
         if (lista->T.TareaID == elemento)
         {
-            printf("\nTarea %d", elemento+1);
+            printf("\nTarea %d", listaTareas->T.TareaID);
             printf("\nID: %d",listaTareas->T.TareaID);
             printf("\nDescripcion: ");
             puts(listaTareas->T.Descripcion);
@@ -204,8 +184,28 @@ Nodo *cargarNodo(int i){
     return NNodo;
 }
 
+void mostrTareasYMober(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas){
+    Nodo *aux = crearNodo(); 
+    int eleccion = 1;
+    
+    for (int i = 1; i <=  cantidadTareas; i++)
+    {
+        mostrTareas(*listaTareas,i);
+        printf("\n Esta tarea fue realisada ? \n 1_SI      2_NO");
+        scanf("%d", &eleccion);
+        if (eleccion == 1)
+        {
+            insertarNodo(tareasRealizadas,(*listaTareas)->T.Descripcion,(*listaTareas)->T.TareaID,(*listaTareas)->T.Duracion);
+        } else
+        {
+            insertarNodo(&aux,(*listaTareas)->T.Descripcion,(*listaTareas)->T.TareaID,(*listaTareas)->T.Duracion);
 
-Nodo* crearNodo2(char descripcion,int id,int duracion)
+        }
+        *listaTareas = (*listaTareas)->Siguiente;
+    }
+    *listaTareas = aux;
+}
+Nodo* crearNodo2(char *descripcion,int id,int duracion)
 {
     Nodo *Tarea = (Nodo *)malloc(sizeof(Nodo));
 
