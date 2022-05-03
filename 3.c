@@ -168,7 +168,7 @@ Nodo *cargarNodo(int i){
     
     int aux;
     char *Buff = (char *)malloc(sizeof(char)*100);
-    NNodo->T;
+    
     
     NNodo->T.TareaID = i+1;
         
@@ -185,14 +185,15 @@ Nodo *cargarNodo(int i){
 }
 
 void mostrTareasYMober(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas){
-    Nodo *aux = crearNodo(); 
-    int eleccion = 1;
+    Nodo *aux = crearNodo();
+    int eleccion;
     
-    for (int i = 1; i <=  cantidadTareas; i++)
+    for (int i = cantidadTareas; i >= 1; i--)
     {
         mostrTareas(*listaTareas,i);
-        printf("\n Esta tarea fue realisada ? \n 1_SI      2_NO");
+        printf("\n Esta tarea fue realisada ? \n 1_SI      2_NO\n");
         scanf("%d", &eleccion);
+        fflush(stdin);
         if (eleccion == 1)
         {
             insertarNodo(tareasRealizadas,(*listaTareas)->T.Descripcion,(*listaTareas)->T.TareaID,(*listaTareas)->T.Duracion);
