@@ -26,6 +26,8 @@ void realizadasYPorRealizar(Nodo **listaTareas,Nodo **tareasRealizadas, int cant
 Nodo BuscarTareaPorID(Nodo *listaTareas, int cantidadTareas);
 Nodo BuscarTareaPorPalabra(Nodo *listaTareas, int cantidadTareas);
 void reasignarNodo(Nodo **,Nodo **, int);
+Nodo* crearNodo2(char descripcion,int id,int duracion);
+void insertarNodo(Nodo **start,char *descripcion,int id,int duracion);
 void main(){
     int cantidadTareas = 0;
     Nodo *listaTareas;
@@ -43,7 +45,7 @@ void main(){
 
     mostrTareasYMober(&listaTareas,&tareasRealizadas, cantidadTareas);
 
-    realizadasYPorRealizar(listaTareas,tareasRealizadas, cantidadTareas);
+    realizadasYPorRealizar(&listaTareas,&tareasRealizadas, cantidadTareas);
 
     BuscarTareaPorID(listaTareas, cantidadTareas);
     BuscarTareaPorPalabra(listaTareas,cantidadTareas);
@@ -82,20 +84,25 @@ void cargarTareas(Nodo **lista, int cantidad){
 }
 
 void mostrTareasYMober(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas){
+    Nodo *aux = crearNodo(); 
+    int eleccion = 1;
     
-    int eleccion = 0;
-    
-    for (int i = 0; i <  cantidadTareas; i++)
+    for (int i = 1; i <=  cantidadTareas; i++)
     {
         mostrTareas(*listaTareas,i);
-        print("\n Esta tarea fue realisada ? \n 1_SI      2_NO");
+        printf("\n Esta tarea fue realisada ? \n 1_SI      2_NO");
         scanf("%d", &eleccion);
         if (eleccion == 1)
         {
-            reasignarNodo(listaTareas, tareasRealizadas, i);
-        }  
+            insertarNodo(tareasRealizadas,(*listaTareas)->T.Descripcion,(*listaTareas)->T.TareaID,(*listaTareas)->T.Duracion);
+        } else
+        {
+            insertarNodo(&aux,(*listaTareas)->T.Descripcion,(*listaTareas)->T.TareaID,(*listaTareas)->T.Duracion);
+
+        }
+        *listaTareas = (*listaTareas)->Siguiente;
     }
-    
+    *listaTareas = aux;
 }
 
 void mostrTareas(Nodo *listaTareas,int elemento){
@@ -123,13 +130,13 @@ void mostrTareas(Nodo *listaTareas,int elemento){
 void realizadasYPorRealizar(Nodo **listaTareas,Nodo **tareasRealizadas, int cantidadTareas){
 
     printf("\nTareas por realizar:   \n");
-    for (int i = 0; i < cantidadTareas; i++)
+    for (int i = 1; i <= cantidadTareas; i++)
     {
         if(*(listaTareas + i) != NULL)
             mostrTareas(*listaTareas,i);
     }
     printf("\nTareas realizadas:   \n");
-    for (int i = 0; i < cantidadTareas; i++)
+    for (int i = 1; i <= cantidadTareas; i++)
     {
         if(*(tareasRealizadas + i) != NULL)
             mostrTareas(*tareasRealizadas,i);
@@ -142,7 +149,7 @@ Nodo BuscarTareaPorID(Nodo *listaTareas, int cantidadTareas){
     int idBuscado = 0;
     printf("\nIngrese el ID de la tarea buscada: ");
     scanf("%d",&idBuscado);
-    for (int i = 0; i < cantidadTareas; i++)
+    for (int i = 1; i <= cantidadTareas; i++)
     {
         if (listaTareas->T.TareaID == idBuscado )
         {
@@ -161,7 +168,7 @@ Nodo BuscarTareaPorPalabra(Nodo *listaTareas, int cantidadTareas){
     fflush(stdin);
     gets(palabra);
 
-    for (int i = 0; i < cantidadTareas; i++)
+    for (int i = 1; i <= cantidadTareas; i++)
     {
         if (strstr(listaTareas->T.Descripcion,palabra))
         {
@@ -174,22 +181,6 @@ Nodo BuscarTareaPorPalabra(Nodo *listaTareas, int cantidadTareas){
     }
 
 
-void reasignarNodo(Nodo **listaPendiente, Nodo **listaHecha, int i){
-    Nodo *aux;
-    while (*listaPendiente != NULL)
-    {
-        
-        if ((*listaPendiente)->T.TareaID = i)
-        {
-            aux = (*listaPendiente);
-            (*listaPendiente)->Siguiente = aux->Siguiente;
-            (*listaHecha) = aux;
-            free(aux);
-        }
-        
-    }
-    
-}
 
 Nodo *cargarNodo(int i){
     Nodo * NNodo = (Nodo *) malloc (sizeof(Nodo));
@@ -211,4 +202,32 @@ Nodo *cargarNodo(int i){
     scanf("%d",&aux);
     NNodo->T.Duracion = aux;
     return NNodo;
+}
+
+
+Nodo* crearNodo2(char descripcion,int id,int duracion)
+{
+    Nodo *Tarea = (Nodo *)malloc(sizeof(Nodo));
+
+
+    Tarea->T.Descripcion = (char *) malloc(strlen(descripcion+1) * sizeof(char));
+    strcpy(Tarea->T.Descripcion, descripcion);
+    if(duracion==0){
+        Tarea->T.Duracion = rand() % 99;
+    }else{
+        Tarea->T.Duracion = duracion;
+    }
+    Tarea->T.TareaID = id;
+
+    Tarea->Siguiente=NULL;
+
+    return Tarea;
+}
+
+void insertarNodo(Nodo **start,char *descripcion,int id,int duracion)
+{
+    
+    Nodo *nuevoNodo = crearNodo2(descripcion,id,duracion);
+    nuevoNodo->Siguiente = *start;
+    *start = nuevoNodo;
 }
